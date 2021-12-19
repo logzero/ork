@@ -39,7 +39,12 @@
 				</Compiler>
 				<Linker>
 					<Add option="-pg" />
+					<Add library="pthread" />
+					<Add library="rt" />
+					<Add library="GLEW" />
 					<Add library="glut" />
+					<Add library="GLU" />
+					<Add library="GL" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -111,10 +116,12 @@
 				</Compiler>
 				<Linker>
 					<Add option="-pg" />
-					<Add library="glut" />
 					<Add library="pthread" />
 					<Add library="rt" />
-					<Add directory="$(#glut)" />
+					<Add library="GLEW" />
+					<Add library="glut" />
+					<Add library="GLU" />
+					<Add library="GL" />
 				</Linker>
 			</Target>
 			<Target title="Examples">
@@ -173,12 +180,14 @@
 					<Add option="-pg" />
 					<Add library="pthread" />
 					<Add library="rt" />
-					<Add directory="$(#glut)" />
+					<Add library="GLEW" />
+					<Add library="glut" />
+					<Add library="GLU" />
+					<Add library="GL" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-march=i686" />
 			<Add option="-pedantic-errors" />
 			<Add option="-pedantic" />
 			<Add option="-Wall" />
@@ -196,9 +205,6 @@
 			<Add option="-D$(#glut.cflags)" />
 			<Add directory="libraries" />
 		</Compiler>
-		<Linker>
-			<Add option="$(#glew)" />
-		</Linker>
 		<Unit filename="examples/Main.cpp">
 			<Option target="Examples" />
 			<Option target="Examples_UNIX" />
