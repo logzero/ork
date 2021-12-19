@@ -240,7 +240,6 @@ enum MeshMode {
  */
 enum MeshUsage
 {
-    CPU, ///< &nbsp;
     GPU_STATIC, ///< &nbsp;
     GPU_DYNAMIC, ///< &nbsp;
     GPU_STREAM ///< &nbsp;

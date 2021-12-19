@@ -556,7 +556,6 @@ void Mesh<vertex, index>::clear()
     if (created) {
         buffers->reset();
         buffers->setIndicesBuffer(NULL);
-        created = false;
     }
 }
 
@@ -565,22 +564,16 @@ void Mesh<vertex, index>::clearBuffers()
 {
     if (created) {
         buffers->reset();
-        created = false;
     }
 }
 
 template<class vertex, class index>
 void Mesh<vertex, index>::createBuffers() const
 {
-    if (usage == GPU_STATIC || usage == GPU_DYNAMIC || usage ==  GPU_STREAM) {
-        GPUBuffer *gpub = new GPUBuffer();
-        vertexBuffer = ptr<Buffer>(gpub);
-        if (usage == GPU_STATIC) {
-            uploadVertexDataToGPU(STATIC_DRAW);
-        }
-    } else if (usage == CPU) {
-        CPUBuffer *cpub = new CPUBuffer(vertices);
-        vertexBuffer = ptr<Buffer>((Buffer*)cpub);
+    GPUBuffer *gpub = new GPUBuffer();
+    vertexBuffer = ptr<Buffer>(gpub);
+    if (usage == GPU_STATIC) {
+        uploadVertexDataToGPU(STATIC_DRAW);
     }
 
     assert(buffers->getAttributeCount() > 0);
@@ -589,15 +582,10 @@ void Mesh<vertex, index>::createBuffers() const
     }
 
     if (indicesCount != 0) {
-        if (usage == GPU_STATIC || usage == GPU_DYNAMIC || usage == GPU_STREAM) {
-            GPUBuffer *gpub = new GPUBuffer();
-            indexBuffer = ptr<Buffer>(gpub);
-            if (usage == GPU_STATIC) {
-                uploadIndexDataToGPU(STATIC_DRAW);
-            }
-        } else if (usage == CPU) {
-            CPUBuffer *cpub = new CPUBuffer(indices);
-            indexBuffer = ptr<Buffer>(cpub);
+        GPUBuffer *gpub = new GPUBuffer();
+        indexBuffer = ptr<Buffer>(gpub);
+        if (usage == GPU_STATIC) {
+            uploadIndexDataToGPU(STATIC_DRAW);
         }
 
         AttributeType type;

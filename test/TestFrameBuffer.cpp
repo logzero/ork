@@ -782,8 +782,10 @@ TEST4(drawIndirectInstancingDirect)
     quad->addVertex(vec4f(1, 1, 0, 1));
     ptr<MeshBuffers> m = quad->getBuffers();
     fb->clear(true, true, true);
-    int buf[4] = { 3, 8, 0, 0};
-    fb->drawIndirect(p, *m, TRIANGLES, CPUBuffer(buf));
+    int bufData[4] = { 3, 8, 0, 0};
+    ptr<GPUBuffer> buf = new GPUBuffer();
+    buf->setData(4 * sizeof(int), bufData, STATIC_DRAW);
+    fb->drawIndirect(p, *m, TRIANGLES, *buf);
     int tPixels[4 * 8 * 8 * 8];
     int fbPixels[4 * 8 * 8];
     int l = 4 * 8 * 8 * 3;
@@ -817,8 +819,10 @@ TEST4(drawIndirectInstancingIndices)
     quad->addIndice(3);
     ptr<MeshBuffers> m = quad->getBuffers();
     fb->clear(true, true, true);
-    int buf[5] = { 3, 8, 3, 0, 0 };
-    fb->drawIndirect(p, *m, TRIANGLES, CPUBuffer(buf));
+    int bufData[5] = { 3, 8, 3, 0, 0 };
+    ptr<GPUBuffer> buf = new GPUBuffer();
+    buf->setData(5 * sizeof(int), bufData, STATIC_DRAW);
+    fb->drawIndirect(p, *m, TRIANGLES, *buf);
     int tPixels[4 * 8 * 8 * 8];
     int fbPixels[4 * 8 * 8];
     int l = 4 * 8 * 8 * 3;
@@ -852,8 +856,10 @@ TEST4(drawIndirectInstancingIndicesWithBase)
     quad->addIndice(3);
     ptr<MeshBuffers> m = quad->getBuffers();
     fb->clear(true, true, true);
-    int buf[5] = { 3, 8, 0, 1, 0 };
-    fb->drawIndirect(p, *m, TRIANGLES, CPUBuffer(buf));
+    int bufData[5] = { 3, 8, 0, 1, 0 };
+    ptr<GPUBuffer> buf = new GPUBuffer();
+    buf->setData(5 * sizeof(int), bufData, STATIC_DRAW);
+    fb->drawIndirect(p, *m, TRIANGLES, *buf);
     int tPixels[4 * 8 * 8 * 8];
     int fbPixels[4 * 8 * 8];
     int l = 4 * 8 * 8 * 3;
@@ -910,7 +916,7 @@ TEST(cpuMeshModificationDirect)
         Texture::Parameters().mag(NEAREST),  Buffer::Parameters(), CPUBuffer(NULL)), 0);
     fb->setViewport(vec4<GLint>(0, 0, 8, 8));
     ptr<Program> p = new Program(new Module(330, FRAGMENT_SHADER));
-    ptr< Mesh<vec4f, unsigned int> > quad = new Mesh<vec4f, unsigned int>(TRIANGLE_STRIP, CPU);
+    ptr< Mesh<vec4f, unsigned int> > quad = new Mesh<vec4f, unsigned int>(TRIANGLE_STRIP, GPU_DYNAMIC);
     quad->addAttributeType(0, 4, A32F, false);
     quad->addVertex(vec4f(-1, -1, 0, 1));
     quad->addVertex(vec4f(1, -1, 0, 1));
@@ -940,7 +946,7 @@ TEST(cpuMeshModificationIndices)
         Texture::Parameters().mag(NEAREST),  Buffer::Parameters(), CPUBuffer(NULL)), 0);
     fb->setViewport(vec4<GLint>(0, 0, 8, 8));
     ptr<Program> p = new Program(new Module(330, FRAGMENT_SHADER));
-    ptr< Mesh<vec4f, unsigned int> > quad = new Mesh<vec4f, unsigned int>(TRIANGLE_STRIP, CPU);
+    ptr< Mesh<vec4f, unsigned int> > quad = new Mesh<vec4f, unsigned int>(TRIANGLE_STRIP, GPU_DYNAMIC);
     quad->addAttributeType(0, 4, A32F, false);
     quad->addVertex(vec4f(-1, -1, 0, 1));
     quad->addVertex(vec4f(1, -1, 0, 1));

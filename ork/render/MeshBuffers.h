@@ -379,6 +379,16 @@ private:
     ptr<AttributeBuffer> indicesBuffer;
 
     /**
+     * The Vertex Array Object (VAO) of this mesh.
+     */
+    GLuint vertexArrayObject;
+
+    /**
+     * Whether the Vertex Array Object (VAO) of this mesh must be updated.
+     */
+    mutable bool dirty;
+
+    /**
      * The currently bound mesh buffers. The buffers of a mesh must be bound
      * before it can be drawn.
      */

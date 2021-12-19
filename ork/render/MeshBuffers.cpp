@@ -58,8 +58,9 @@ GLenum getAttributeType(AttributeType t);
 GLenum getMeshMode(MeshMode m);
 
 MeshBuffers::MeshBuffers() :
-    Object("MeshBuffers"), mode(POINTS), nvertices(0), nindices(0), primitiveRestart(-1), patchVertices(0)
+    Object("MeshBuffers"), mode(POINTS), nvertices(0), nindices(0), primitiveRestart(-1), patchVertices(0), dirty(true)
 {
+    glGenVertexArrays(1, &vertexArrayObject);
 }
 
 MeshBuffers::~MeshBuffers()
@@ -89,6 +90,7 @@ void MeshBuffers::addAttributeBuffer(int index, int size, AttributeType type, bo
 {
     ptr<AttributeBuffer> a = new AttributeBuffer(index, size, type, norm, NULL);
     attributeBuffers.push_back(a);
+    dirty = true;
 }
 
 void MeshBuffers::addAttributeBuffer(int index, int size, int vertexsize, AttributeType type, bool norm)
@@ -102,21 +104,30 @@ void MeshBuffers::addAttributeBuffer(int index, int size, int vertexsize, Attrib
     }
     ptr<AttributeBuffer> a = new AttributeBuffer(index, size, type, norm, NULL, vertexsize, offset);
     attributeBuffers.push_back(a);
+    dirty = true;
 }
 
 void MeshBuffers::addAttributeBuffer(ptr<AttributeBuffer> buffer)
 {
     attributeBuffers.push_back(buffer);
+    dirty = true;
 }
 
 void MeshBuffers::setIndicesBuffer(ptr<AttributeBuffer> indices)
 {
     indicesBuffer = indices;
+    dirty = true;
 }
 
 void MeshBuffers::bind() const
 {
+    if (!dirty) {
+        glBindVertexArray(vertexArrayObject);
+        assert(FrameBuffer::getError() == 0);
+        return;
+    }
     assert(attributeBuffers.size() > 0);
+    glBindVertexArray(vertexArrayObject);
     // binds the attribute buffers for each attribute
     for (int i = (int) attributeBuffers.size() - 1; i >= 0; --i) {
         ptr<AttributeBuffer> a = attributeBuffers[i];
@@ -142,15 +153,12 @@ void MeshBuffers::bind() const
         offset = b->data(indicesBuffer->offset);
     }
     assert(FrameBuffer::getError() == 0);
+    dirty = false;
 }
 
 void MeshBuffers::unbind() const
 {
-    for (int i = (int) attributeBuffers.size() - 1; i >= 0; --i) {
-        ptr<AttributeBuffer> a = attributeBuffers[i];
-        int index = a->index;
-        glDisableVertexAttribArray(index);
-    }
+    glBindVertexArray(0);
     assert(glGetError() == 0);
 }
 
