@@ -147,7 +147,9 @@ GlutWindow::GlutWindow(const Parameters &params) : Window(params)
 #ifdef USEFREEGLUT
     //Init OpenGL context
     glutInitContextVersion(params.version().x, params.version().y);
-    glutInitContextProfile(GLUT_CORE_PROFILE);
+    // AntTweakBar, used in Proland, does not work with the core profile.
+    // glutInitContextProfile(GLUT_CORE_PROFILE);
+    glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
     glutInitContextFlags(GLUT_FORWARD_COMPATIBLE | (params.debug() ? GLUT_DEBUG : 0));
 #endif
 
