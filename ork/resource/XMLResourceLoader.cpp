@@ -73,11 +73,10 @@ static bool isTextureFile(const string &name)
 {
     int n = name.size() - 4;
     if (n > 0) {
-        const char *ext = name.substr(n).c_str();
-        if (strcmp(".jpg", ext) == 0 ||
-            strcmp(".png", ext) == 0 ||
-            strcmp(".bmp", ext) == 0 ||
-            strcmp(".tga", ext) == 0)
+        if (name.compare(n, 4, ".jpg") == 0 ||
+            name.compare(n, 4, ".png") == 0 ||
+            name.compare(n, 4, ".bmp") == 0 ||
+            name.compare(n, 4, ".tga") == 0)
         {
             return true;
         }
@@ -267,7 +266,7 @@ ptr<ResourceDescriptor> XMLResourceLoader::loadResource(const string &name)
         if (desc == NULL) {
             desc = buildProgramDescriptor(name);
         }
-    } else if (name.size() >= 5 && strcmp(".mesh", name.substr(name.size() - 5).c_str()) == 0) {
+    } else if (name.size() >= 5 && name.compare(name.size() - 5, 5, ".mesh") == 0) {
         // mesh resources do not have any file to describe the XML part, which is
         // trivial and hence generated on the fly here:
         desc = new TiXmlElement("mesh");
