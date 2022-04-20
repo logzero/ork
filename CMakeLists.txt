@@ -1,6 +1,5 @@
 project(Ork CXX C)
-cmake_minimum_required(VERSION 2.6)
-cmake_policy(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.12)
 
 SET(ORK_VERSION_MAJOR 3)
 SET(ORK_VERSION_MINOR 2)
