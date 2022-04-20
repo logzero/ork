@@ -25,6 +25,10 @@ link_directories(${Glew_LIBRARY_DIRS})
 
 find_package(GLUT)
 
+if (GLUT_LIBRARY MATCHES "freeglut")
+	add_compile_definitions(USEFREEGLUT)
+endif()
+
 set(LIB_INSTALL_DIR "lib" CACHE STRING "Library directory name (lib/lib32/lib64)" )
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
